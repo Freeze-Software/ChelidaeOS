@@ -9,7 +9,7 @@
 #include "user_handler.h"
 #include "user_window.h"
 
-int min(int a, int b);
+int min(int a, int b);f
 int max(int a, int b);
 void startWindowHandler(Widget *w, message *msg);
 
@@ -31,7 +31,7 @@ typedef struct {
 	int x, y;
 	int isActive;
 	int isSelected;
-	// Tambahan untuk multi-drag: posisi relatif saat drag dimulai
+	// added to multi-drag: relative position when drag starts
 	int dragOffsetX;
 	int dragOffsetY;
 } DesktopApp;
@@ -46,14 +46,14 @@ struct RGBA iconBgColor;
 
 DesktopApp apps[MAX_APPS];
 
-// Multi-drag state
-int draggingApp = -1;           // App yang di-drag (leader)
+// Mlti-drag state
+int draggingApp = -1;           // dragge (leader)
 int isDragging = 0;
 int dragStartX = 0;
 int dragStartY = 0;
 int appOriginalX = 0;
 int appOriginalY = 0;
-int selectedCount = 0;          // Jumlah app yang terpilih
+int selectedCount = 0;          // number of apps selected
 
 int isSelecting = 0;
 int selectionStartX = 0;
@@ -75,7 +75,7 @@ void clearAllSelections() {
 	selectedCount = 0;
 }
 
-// Hitung jumlah app yang terpilih
+// count the number of selected apps
 int countSelectedApps() {
 	int count = 0;
 	for (int i = 0; i < MAX_APPS; i++) {
@@ -296,24 +296,24 @@ int findAppAtPosition(int mouseX, int mouseY) {
 	return -1;
 }
 
-// Setup offsets untuk semua selected apps saat drag dimulai
+// setup offsets for all selected apps when drag starts.
 void setupMultiDragOffsets(int leaderIdx, int startX, int startY) {
 	for (int i = 0; i < MAX_APPS; i++) {
 		if (apps[i].isActive && apps[i].isSelected) {
-			// Simpan offset relatif terhadap leader
+			// store offset relative to leader
 			apps[i].dragOffsetX = apps[i].x - apps[leaderIdx].x;
 			apps[i].dragOffsetY = apps[i].y - apps[leaderIdx].y;
 		}
 	}
 }
 
-// Update posisi semua selected apps saat drag
+// udate the position of all selected apps when dragging
 void updateMultiDragPositions(int leaderIdx, int newLeaderX, int newLeaderY) {
 	for (int i = 0; i < MAX_APPS; i++) {
 		if (!apps[i].isActive || !apps[i].isSelected)
 			continue;
 
-		// Hitung posisi baru berdasarkan offset
+		// calculate new position based on offset
 		int newX = newLeaderX + apps[i].dragOffsetX;
 		int newY = newLeaderY + apps[i].dragOffsetY;
 
@@ -414,7 +414,7 @@ void customUpdateWindow() {
 			int appIdx = findAppAtPosition(mouseX, mouseY);
 
 			if (appIdx != -1) {
-				// Jika klik app yang tidak terpilih, clear selection
+
 				if (!apps[appIdx].isSelected) {
 					clearAllSelections();
 					apps[appIdx].isSelected = 1;
@@ -426,16 +426,14 @@ void customUpdateWindow() {
 				dragStartX = mouseX;
 				dragStartY = mouseY;
 				
-				// Setup offsets untuk multi-drag
 				setupMultiDragOffsets(appIdx, mouseX, mouseY);
 				
-				// Simpan posisi original leader
 				appOriginalX = apps[appIdx].x;
 				appOriginalY = apps[appIdx].y;
 				
 				isSelecting = 0;
 			} else {
-				// Klik di empty space -> start selection box
+
 				isSelecting = 1;
 				selectionStartX = mouseX;
 				selectionStartY = mouseY;
@@ -462,11 +460,10 @@ void customUpdateWindow() {
 				}
 
 				if (isDragging) {
-					// Multi-drag: update semua selected apps
+
 					int newLeaderX = appOriginalX + deltaX;
 					int newLeaderY = appOriginalY + deltaY;
 					
-					// Boundary check untuk leader
 					if (newLeaderX < 0) newLeaderX = 0;
 					if (newLeaderY < 0) newLeaderY = 0;
 					if (newLeaderX + ICON_SIZE > SCREEN_WIDTH)
@@ -536,7 +533,7 @@ void customUpdateWindow() {
 			int appIdx = findAppAtPosition(mouseX, mouseY);
 
 			if (appIdx == -1) {
-				// Klik di empty space -> clear selection
+
 				clearAllSelections();
 				
 				for (int p = desktop.widgetlisttail; p != -1;
@@ -551,7 +548,7 @@ void customUpdateWindow() {
 					}
 				}
 			} else {
-				// Klik di app -> jadikan satu-satunya yang terpilih
+
 				clearAllSelections();
 				apps[appIdx].isSelected = 1;
 				selectedCount = 1;
@@ -563,7 +560,7 @@ void customUpdateWindow() {
 			int appIdx = findAppAtPosition(mouseX, mouseY);
 
 			if (appIdx != -1) {
-				// Double-click hanya jalankan yang diklik
+
 				if (fork() == 0) {
 					char *argv2[] = {apps[appIdx].exec, 0};
 					exec(argv2[0], argv2);

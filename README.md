@@ -1,4 +1,4 @@
-Chelidae is a modified operating system based on the MIT xv6 (x86) kernel, extended with a custom graphical user interface and window manager.
+Chelidae is a custom operating system built on the MIT xv6 (x86) kernel, enhanced with a graphical user interface, window manager, and additional system features.
 
 ## Toolchain & Requirements
 
