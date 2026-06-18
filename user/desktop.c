@@ -9,7 +9,7 @@
 #include "user_handler.h"
 #include "user_window.h"
 
-int min(int a, int b);f
+int min(int a, int b);
 int max(int a, int b);
 void startWindowHandler(Widget *w, message *msg);
 
